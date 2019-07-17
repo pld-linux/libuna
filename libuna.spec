@@ -2,34 +2,40 @@
 # Conditional build:
 %bcond_without	tools	# unatools (disable for bootstrap)
 
+# m4/libcdatetime.m4
+%define		libcdatetime_ver	20141018
+# m4/libcerror.m4
+%define		libcerror_ver		20120425
+# m4/libcfile.m4
+%define		libcfile_ver		20160409
+# m4/libclocale.m4
+%define		libclocale_ver		20120425
+# m4/libcnotify.m4
+%define		libcnotify_ver		20120425
 Summary:	Library to support Unicode and ASCII (byte stream) conversions
 Summary(pl.UTF-8):	Biblioteka obsługująca przekształcenia Unicode i ASCII (strumieni bajtów)
 Name:		libuna
-Version:	20150101
-Release:	2
+Version:	20190102
+Release:	1
 License:	LGPL v3+
 Group:		Libraries
-Source0:	https://github.com/libyal/libuna/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	36e8c89a1a8e516b65359ed6340fa455
-Patch0:		%{name}-system-libs.patch
+#Source0Download: https://github.com/libyal/libuna/releases
+Source0:	https://github.com/libyal/libuna/releases/download/%{version}/%{name}-alpha-%{version}.tar.gz
+# Source0-md5:	0baeb0c0b19e2fb85bdfb7b7bf0150ba
 URL:		https://github.com/libyal/libuna/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1.6
 BuildRequires:	gettext-tools >= 0.18.1
-BuildRequires:	libcerror-devel >= 20120425
-BuildRequires:	libcstring-devel >= 20120425
+BuildRequires:	libcerror-devel >= %{libcerror_ver}
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
-BuildRequires:	sed >= 4.0
 %if %{with tools}
-BuildRequires:	libcdatetime-devel >= 20141018
-BuildRequires:	libclocale-devel >= 20120425
-BuildRequires:	libcnotify-devel >= 20120425
-BuildRequires:	libcfile-devel >= 20140503
-BuildRequires:	libcsystem-devel >= 20141018
+BuildRequires:	libcdatetime-devel >= %{libcdatetime_ver}
+BuildRequires:	libclocale-devel >= %{libclocale_ver}
+BuildRequires:	libcnotify-devel >= %{libcnotify_ver}
+BuildRequires:	libcfile-devel >= %{libcfile_ver}
 %endif
-Requires:	libcerror >= 20120425
-Requires:	libcstring >= 20120425
+Requires:	libcerror >= %{libcerror_ver}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -45,8 +51,7 @@ Summary:	Header files for libuna library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libuna
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libcerror-devel >= 20120425
-Requires:	libcstring-devel >= 20120425
+Requires:	libcerror-devel >= %{libcerror_ver}
 
 %description devel
 Header files for libuna library.
@@ -71,11 +76,10 @@ Summary:	Unicode and ASCII (byte stream) conversion utilities
 Summary(pl.UTF-8):	Narzędzia do konwersji Unicode i ASCII (strumieni bajtów)
 Group:		Applications/Text
 Requires:	%{name} = %{version}-%{release}
-Requires:	libcdatetime >= 20141018
-Requires:	libclocale >= 20120425
-Requires:	libcnotify >= 20120425
-Requires:	libcfile >= 20140503
-Requires:	libcsystem >= 20141018
+Requires:	libcdatetime >= %{libcdatetime_ver}
+Requires:	libclocale >= %{libclocale_ver}
+Requires:	libcnotify >= %{libcnotify_ver}
+Requires:	libcfile >= %{libcfile_ver}
 
 %description tools
 Unicode and ASCII (byte stream) conversion utilities.
@@ -85,18 +89,16 @@ Narzędzia do konwersji Unicode i ASCII (strumieni bajtów).
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %{__gettextize}
-%{__sed} -i -e 's/ po\/Makefile.in//' configure.ac
 %{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-%configure \
-	%{!?with_tools:--without-tools}
+%configure
+
 %{__make}
 
 %install
@@ -107,6 +109,11 @@ rm -rf $RPM_BUILD_ROOT
 
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libuna.la
+
+%if %{without tools}
+%{__rm} -f $RPM_BUILD_ROOT%{_bindir}/una* \
+	$RPM_BUILD_ROOT%{_mandir}/man1/una*
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
