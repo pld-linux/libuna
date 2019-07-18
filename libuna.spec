@@ -2,15 +2,11 @@
 # Conditional build:
 %bcond_without	tools	# unatools (disable for bootstrap)
 
-# m4/libcdatetime.m4
+# see m4/${libname}.m4 />= for required version of particular library
 %define		libcdatetime_ver	20141018
-# m4/libcerror.m4
 %define		libcerror_ver		20120425
-# m4/libcfile.m4
 %define		libcfile_ver		20160409
-# m4/libclocale.m4
 %define		libclocale_ver		20120425
-# m4/libcnotify.m4
 %define		libcnotify_ver		20120425
 Summary:	Library to support Unicode and ASCII (byte stream) conversions
 Summary(pl.UTF-8):	Biblioteka obsługująca przekształcenia Unicode i ASCII (strumieni bajtów)
