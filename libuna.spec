@@ -11,19 +11,19 @@
 Summary:	Library to support Unicode and ASCII (byte stream) conversions
 Summary(pl.UTF-8):	Biblioteka obsługująca przekształcenia Unicode i ASCII (strumieni bajtów)
 Name:		libuna
-Version:	20220611
+Version:	20240130
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
 #Source0Download: https://github.com/libyal/libuna/releases
 Source0:	https://github.com/libyal/libuna/releases/download/%{version}/%{name}-alpha-%{version}.tar.gz
-# Source0-md5:	be1541ac73f68176c27cf32f3411ba9d
+# Source0-md5:	60ce1c67eea90f26e83f0fa6001637ea
 URL:		https://github.com/libyal/libuna/
-BuildRequires:	autoconf >= 2.59
+BuildRequires:	autoconf >= 2.71
 BuildRequires:	automake >= 1.6
-BuildRequires:	gettext-tools >= 0.18.1
+BuildRequires:	gettext-tools >= 0.21
 BuildRequires:	libcerror-devel >= %{libcerror_ver}
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 %if %{with tools}
 BuildRequires:	libcdatetime-devel >= %{libcdatetime_ver}
